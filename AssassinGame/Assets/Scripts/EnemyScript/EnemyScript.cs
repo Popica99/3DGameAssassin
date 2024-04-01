@@ -25,7 +25,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("PlayerObj").transform;
+        player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -36,7 +36,7 @@ public class EnemyScript : MonoBehaviour
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
         if (!playerInSightRange && !playerInAttackRange) Patroling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
+        if (playerInSightRange) ChasePlayer();
         //if (playerInSightRange && playerInAttackRange) AttackPlayer();
     }
     //Patroling Functions

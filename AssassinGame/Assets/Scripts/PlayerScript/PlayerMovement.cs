@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject playerObj;
+
     private float vertical;
     private float horizontal;
     private float speed = 4f;
@@ -18,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
     private bool isMovingVertical = false;
     private bool isMovingHorizontal = false;
 
-
     // Update is called once per frame
     void Update()
     {
@@ -30,11 +32,26 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             Debug.Log("Player pressed jump");
         }
+        if (Input.GetKey(KeyCode.A))
+        {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            playerObj.transform.eulerAngles = new Vector2(playerObj.transform.eulerAngles.x, -90f);
+        }
+        if(Input.GetKey(KeyCode.D))
+        {
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            playerObj.transform.eulerAngles = new Vector2(playerObj.transform.eulerAngles.x, 90f);
+        }
 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.velocity = new Vector2(horizontal * speed * 2, rb.velocity.y);
+        }
         Flip();
     }
 
-    private void FixedUpdate()
+
+    /*private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         /*if (isMovingVertical == false)
@@ -54,12 +71,13 @@ public class PlayerMovement : MonoBehaviour
                 isMovingVertical = true;
             }
             else isMovingVertical = false;
-        }*/
+        }
         if (Input.GetKey(KeyCode.LeftShift))
         {
             rb.velocity = new Vector2(horizontal * speed * 2, rb.velocity.y);
         }
-    }
+        
+    }*/
 
     private void OnCollisionEnter(Collision collision)
     {
