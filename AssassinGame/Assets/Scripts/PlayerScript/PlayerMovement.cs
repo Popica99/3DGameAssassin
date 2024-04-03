@@ -30,54 +30,22 @@ public class PlayerMovement : MonoBehaviour
         {
             isPlayerGrounded = false;
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            Debug.Log("Player pressed jump");
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-            playerObj.transform.eulerAngles = new Vector2(playerObj.transform.eulerAngles.x, -90f);
-        }
-        if(Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-            playerObj.transform.eulerAngles = new Vector2(playerObj.transform.eulerAngles.x, 90f);
-        }
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            rb.velocity = new Vector2(horizontal * speed * 2, rb.velocity.y);
         }
         Flip();
     }
 
 
-    /*private void FixedUpdate()
+    private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-        /*if (isMovingVertical == false)
-        {
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-            {
-                rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-                isMovingHorizontal = true;
-            }
-            else isMovingHorizontal = false;
-        }
-        if (isMovingHorizontal == false)
-        {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
-            {
-                rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
-                isMovingVertical = true;
-            }
-            else isMovingVertical = false;
-        }
+        //rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
         if (Input.GetKey(KeyCode.LeftShift))
         {
             rb.velocity = new Vector2(horizontal * speed * 2, rb.velocity.y);
+            //rb.velocity = new Vector2(rb.velocity.x, vertical * speed * 1.2f);
         }
-        
-    }*/
+       
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -93,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
+            localScale.z *= -1f;
             transform.localScale = localScale;
         }
     }
