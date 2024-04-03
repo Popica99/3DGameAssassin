@@ -25,7 +25,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("hoodieguy_model").transform;
         agent = GetComponent<NavMeshAgent>();
     }
 

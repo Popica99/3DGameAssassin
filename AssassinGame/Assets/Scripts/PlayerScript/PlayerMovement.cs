@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameObject playerObj;
-
     private float vertical;
     private float horizontal;
-    private float speed = 4f;
+    private float speedForSprint = 4f;
     private float jumpingPower = 8f;
     private bool isFacingRight = true;
 
@@ -21,81 +19,142 @@ public class PlayerMovement : MonoBehaviour
     private bool isMovingVertical = false;
     private bool isMovingHorizontal = false;
 
+    private Vector3 lastPos;
+
+    private Animator runAnimation;
+    bool animationStarted = false;
+    bool animationStartedA = false;
+    bool animationStartedD = false;
+    bool anyMovementKeyPressed = false;
+
+    private void Start()
+    {
+        runAnimation = GetComponent<Animator>();
+        lastPos = transform.position;
+    }
     // Update is called once per frame
     void Update()
     {
-        //vertical = Input.GetAxis("Vertical");
         horizontal = Input.GetAxis("Horizontal");
+        StartCoroutine(DelayBetweenAnim());
+        // Check if the A key is pressed and the animation hasn't started yet
+        /*if (Input.GetKeyDown(KeyCode.A) && !animationStartedA && !animationStartedD)
+        {
+            runAnimation.SetTrigger("TrStartRun"); // Start the animation
+            animationStartedA = true; // Set the flag to true indicating animation has started by A
+        }
+
+        // Check if the D key is pressed and the animation hasn't started yet
+        if (Input.GetKeyDown(KeyCode.D) && !animationStartedD && !animationStartedA)
+        {
+            runAnimation.SetTrigger("TrStartRun"); // Start the animation
+            animationStartedD = true; // Set the flag to true indicating animation has started by D
+        }
+
+        // Check if the A key is released and reset the flag
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            animationStartedA = false;
+            if (!animationStartedD) // Check if animation hasn't started by D
+                runAnimation.SetTrigger("TrStopRun"); // Stop the animation
+        }
+
+        // Check if the D key is released and reset the flag
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            animationStartedD = false;
+            if (!animationStartedA) // Check if animation hasn't started by A
+                runAnimation.SetTrigger("TrStopRun"); // Stop the animation
+        }*/
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rb.velocity = new Vector2(horizontal * speedForSprint * 2, rb.velocity.y);
+            runAnimation.speed = 1.5f;
+            //rb.velocity = new Vector2(rb.velocity.x, vertical * speed * 1.2f);
+        }
+        else runAnimation.speed = 1f;
         if (Input.GetKeyDown(KeyCode.Space) && isPlayerGrounded)
         {
             isPlayerGrounded = false;
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            Debug.Log("Player pressed jump");
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-            playerObj.transform.eulerAngles = new Vector2(playerObj.transform.eulerAngles.x, -90f);
-        }
-        if(Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-            playerObj.transform.eulerAngles = new Vector2(playerObj.transform.eulerAngles.x, 90f);
-        }
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            rb.velocity = new Vector2(horizontal * speed * 2, rb.velocity.y);
         }
         Flip();
     }
 
 
-    /*private void FixedUpdate()
+    private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-        /*if (isMovingVertical == false)
-        {
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-            {
-                rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-                isMovingHorizontal = true;
-            }
-            else isMovingHorizontal = false;
-        }
-        if (isMovingHorizontal == false)
-        {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
-            {
-                rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
-                isMovingVertical = true;
-            }
-            else isMovingVertical = false;
-        }
+        rb.velocity = new Vector2(horizontal * speedForSprint, rb.velocity.y);
+        //rb.velocity = new Vector2(rb.velocity.x, vertical * speedForSprint);
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            rb.velocity = new Vector2(horizontal * speed * 2, rb.velocity.y);
+            rb.velocity = new Vector2(horizontal * speedForSprint * 2, rb.velocity.y);
+            runAnimation.speed = 1.5f;
+            //rb.velocity = new Vector2(rb.velocity.x, vertical * speed * 1.2f);
         }
-        
-    }*/
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Platform")
-        {
-            isPlayerGrounded = true;
-        }
+        else runAnimation.speed = 1f;
     }
 
-    private void Flip()
-    {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f) 
+        private void OnCollisionEnter(Collision collision)
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            if (collision.gameObject.name == "Platform")
+            {
+                isPlayerGrounded = true;
+            }
+        }
+
+        private void Flip()
+        {
+
+
+            if (horizontal < 0f)
+            {
+                isFacingRight = !isFacingRight;
+                /*Vector3 localScale = transform.localScale;
+                localScale.z *= -1f;
+                transform.localScale = localScale;*/
+                transform.rotation = Quaternion.Euler(0, -90, 0);
+            }
+            if (horizontal > 0f)
+            {
+                isFacingRight = !isFacingRight;
+                /*Vector3 localScale = transform.localScale;
+                localScale.z *= -1f;
+                transform.localScale = localScale;*/
+                transform.rotation = Quaternion.Euler(0, 90, 0);
+            }
+        }
+    private IEnumerator DelayBetweenAnim()
+    {
+        if (Input.GetKeyDown(KeyCode.A) && !animationStartedA)
+        {
+            runAnimation.SetTrigger("TrStartRun"); // Start the animation
+            animationStartedA = true; // Set the flag to true indicating animation has started by A
+        }
+
+        // Check if the D key is pressed and the animation hasn't started yet
+        if (Input.GetKeyDown(KeyCode.D) && !animationStartedD)
+        {
+            runAnimation.SetTrigger("TrStartRun"); // Start the animation
+            animationStartedD = true; // Set the flag to true indicating animation has started by D
+        }
+
+        // Check if the A key is released and reset the flag
+        yield return new WaitForSeconds(0.5f);
+        if (Input.GetKeyUp(KeyCode.A))
+        {
+            animationStartedA = false;
+            if (!animationStartedD) // Check if animation hasn't started by D
+                runAnimation.SetTrigger("TrStopRun"); // Stop the animation
+        }
+
+        // Check if the D key is released and reset the flag
+        yield return new WaitForSeconds(0.5f);
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            animationStartedD = false;
+            if (!animationStartedA) // Check if animation hasn't started by A
+                runAnimation.SetTrigger("TrStopRun"); // Stop the animation
         }
     }
-
 }
