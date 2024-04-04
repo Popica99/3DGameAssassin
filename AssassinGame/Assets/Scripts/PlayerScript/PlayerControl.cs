@@ -1,26 +1,28 @@
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class PlayerControl : MonoBehaviour
-{
-    public float maxSpeed = 20f;
-    public float acceleration = 64f;
-    public float jumpSpeed = 8f;
-    public float jumpDuration = 150f;
+public class PlayerControl : MonoBehaviour {
 
+    //Public variables
+    public float MaxSpeed = 20;
+    public float Acceleration = 64;
+    public float JumpSpeed = 8;
+    public float JumpDuration = 150;
+
+     //Input variables
     private float horizontal;
     private float vertical;
     private float jumpInput;
 
+    //Internal variables
     private bool onTheGround;
     private float jmpDuration;
     private bool jumpKeyDown = false;
     private bool canVariableJump = false;
-    private float movement_Aim;
+    private float movement_Anim;
 
-    Rigidbody rb_velocity;
-    Animator runAnimatior;
+    Rigidbody rigid;
+    Animator anim;
     LayerMask layerMask;
     Transform modelTrans;
 
@@ -29,27 +31,27 @@ public class PlayerControl : MonoBehaviour
     public Vector3 lookPos;
     GameObject rsp;
 
-    private void Start()
+	void Start () 
     {
-        rb_velocity = GetComponent<Rigidbody>();
-        //SetupAnimator();
+        rigid = GetComponent<Rigidbody>();
+        SetupAnimator();
 
         layerMask = ~(1 << 8);
 
         rsp = new GameObject();
         rsp.name = transform.root.name + " Right Shoulder IK Helper";
-    }
-
-    private void FixedUpdate()
+	}
+	
+	void FixedUpdate () 
     {
         InputHandler();
         UpdateRigidbodyValues();
         MovementHandler();
         HandleRotation();
         HandleAimingPos();
-        //HandleAnimations();
+        HandleAnimations();
         HandleShoulder();
-    }
+	}
 
     void InputHandler()
     {
@@ -61,26 +63,27 @@ public class PlayerControl : MonoBehaviour
     void MovementHandler()
     {
         onTheGround = isOnGround();
+
         if(horizontal < -0.1f)
         {
-            if (rb_velocity.velocity.x > -this.maxSpeed)
+            if(rigid.velocity.x > -this.MaxSpeed)
             {
-                rb_velocity.AddForce(new Vector3(-this.acceleration, 0, 0));
+                rigid.AddForce(new Vector3(-this.Acceleration,0,0));
             }
             else
             {
-                rb_velocity.velocity = new Vector3(-this.maxSpeed, rb_velocity.velocity.y, 0);
+                rigid.velocity = new Vector3(-this.MaxSpeed, rigid.velocity.y, 0);
             }
         }
         else if (horizontal > 0.1f)
         {
-            if (rb_velocity.velocity.x < this.maxSpeed) 
+            if(rigid.velocity.x < this.MaxSpeed)
             {
-                rb_velocity.AddForce(new Vector3(this.acceleration, 0, 0));
+                rigid.AddForce(new Vector3(this.Acceleration, 0, 0));
             }
             else
             {
-                rb_velocity.velocity = new Vector3(this.maxSpeed, rb_velocity.velocity.y, 0);
+                rigid.velocity = new Vector3(this.MaxSpeed, rigid.velocity.y, 0);
             }
         }
 
@@ -91,32 +94,33 @@ public class PlayerControl : MonoBehaviour
                 jumpKeyDown = true;
 
                 if (onTheGround)
-                {
-                    rb_velocity.velocity = new Vector3(rb_velocity.velocity.y, this.jumpSpeed, 0);
-                    jumpDuration = 0.0f;
+                {                  
+                    rigid.velocity = new Vector3(rigid.velocity.y, this.JumpSpeed, 0);
+                    jmpDuration = 0.0f;            
                 }
             }
             else if (canVariableJump)
             {
-                jumpDuration += Time.deltaTime;
 
-                if (jumpDuration <this.jumpDuration / 1000)
+                jmpDuration += Time.deltaTime;
+
+                if (jmpDuration < this.JumpDuration / 1000)
                 {
-                    rb_velocity.velocity = new Vector3(rb_velocity.velocity.x, this.jumpSpeed, 0);
+                    rigid.velocity = new Vector3(rigid.velocity.x, this.JumpSpeed, 0);
                 }
             }
-            else
-            {
-                jumpKeyDown = false;
-            }
+        }
+        else
+        {
+            jumpKeyDown = false;
         }
     }
 
     void HandleRotation()
     {
-        Vector3 directonToLook = lookPos - transform.position;
-        directonToLook.y = 0;
-        Quaternion targetRotation = Quaternion.LookRotation(directonToLook);
+        Vector3 directionToLook = lookPos - transform.position;
+        directionToLook.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToLook);
 
         Debug.Log(lookPos.x + " " + transform.position.x);
 
@@ -129,12 +133,26 @@ public class PlayerControl : MonoBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity)) 
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             Vector3 lookP = hit.point;
             lookP.z = transform.position.z;
             lookPos = lookP;
         }
+    }
+
+    void HandleAnimations()
+    {
+        anim.SetBool("OnAir", !onTheGround);
+        
+        float animValue = horizontal;
+
+        if (lookPos.x < transform.position.x)
+        {
+            animValue = -animValue;
+        }
+
+        anim.SetFloat("Movement", animValue, .1f, Time.deltaTime);
     }
 
     void HandleShoulder()
@@ -147,29 +165,54 @@ public class PlayerControl : MonoBehaviour
 
         shoulderTrans.position = rsp.transform.position;
     }
+
+    void UpdateRigidbodyValues()
+    {
+        if (onTheGround)
+        {
+            rigid.drag = 4;  
+        }
+        else
+        {
+            rigid.drag = 0;
+        }
+    }
+
     private bool isOnGround()
     {
         bool retVal = false;
-        float lengthToSearch = 1.5f;
+        float lengthToSearch = 1.5f;    
+
         Vector3 lineStart = transform.position + Vector3.up;
+
         Vector3 vectorToSearch = -Vector3.up;
+
         RaycastHit hit;
+
         if (Physics.Raycast(lineStart, vectorToSearch, out hit, lengthToSearch, layerMask))
         {
             retVal = true;
         }
+
         return retVal;
     }
 
-    void UpdateRigidbodyValues()
+    void SetupAnimator()
     {
-        if (onTheGround) 
+        // this is a ref to the animator component on the root.
+        anim = GetComponent<Animator>();
+
+        // we use avatar from a child animator component if present
+        // this is to enable easy swapping of the character model as a child node
+        foreach (var childAnimator in GetComponentsInChildren<Animator>())
         {
-            rb_velocity.drag = 4;
-        }
-        else
-        {
-             rb_velocity.drag = 0;
+            if (childAnimator != anim)
+            {
+                anim.avatar = childAnimator.avatar;
+                modelTrans = childAnimator.transform;
+                Destroy(childAnimator);
+                break; //if you find the first animator, stop searching
+            }
         }
     }
 }
