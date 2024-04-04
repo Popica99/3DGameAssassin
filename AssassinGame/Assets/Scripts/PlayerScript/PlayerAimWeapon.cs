@@ -5,7 +5,7 @@ using CodeMonkey.Utils;
 
 public class PlayerAimWeapon : MonoBehaviour
 {
-    [SerializeField] bool lockCursor = true;
+    /*[SerializeField] bool lockCursor = true;
     private void Start()
     {
         if (lockCursor == true)
