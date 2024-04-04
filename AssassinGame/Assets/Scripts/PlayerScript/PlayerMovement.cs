@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -36,7 +37,9 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxis("Horizontal");
-        StartCoroutine(DelayBetweenAnim());
+        //runAnimation.SetFloat("TrStartRunFloat1", Math.Abs(Input.GetAxis("Horizontal")));
+        //runAnimation.SetFloat("TrStartRunFloat2", Input.GetAxis("Horizontal"));
+        //StartCoroutine(DelayBetweenAnim());
         // Check if the A key is pressed and the animation hasn't started yet
         /*if (Input.GetKeyDown(KeyCode.A) && !animationStartedA && !animationStartedD)
         {
@@ -66,13 +69,13 @@ public class PlayerMovement : MonoBehaviour
             if (!animationStartedA) // Check if animation hasn't started by A
                 runAnimation.SetTrigger("TrStopRun"); // Stop the animation
         }*/
-        if (Input.GetKey(KeyCode.LeftShift))
+        /*if (Input.GetKey(KeyCode.LeftShift))
         {
             rb.velocity = new Vector2(horizontal * speedForSprint * 2, rb.velocity.y);
             runAnimation.speed = 1.5f;
             //rb.velocity = new Vector2(rb.velocity.x, vertical * speed * 1.2f);
         }
-        else runAnimation.speed = 1f;
+        else runAnimation.speed = 1f;*/
         if (Input.GetKeyDown(KeyCode.Space) && isPlayerGrounded)
         {
             isPlayerGrounded = false;
