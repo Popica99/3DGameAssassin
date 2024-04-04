@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxis("Horizontal");
-        //runAnimation.SetFloat("TrStartRunFloat1", Math.Abs(Input.GetAxis("Horizontal")));
+        runAnimation.SetFloat("TrStartRunFloat1", Math.Abs(Input.GetAxis("Horizontal")));
         //runAnimation.SetFloat("TrStartRunFloat2", Input.GetAxis("Horizontal"));
         //StartCoroutine(DelayBetweenAnim());
         // Check if the A key is pressed and the animation hasn't started yet
