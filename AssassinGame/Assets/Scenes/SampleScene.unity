@@ -175,11 +175,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319521061}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a27cbdcd01591b6409b398e6a93d4bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTransform: {fileID: 319521062}
   rb: {fileID: 319521064}
   groundCheck: {fileID: 1401820036}
   groundLayer:
@@ -240,7 +241,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319521061}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4a9aec31d7f2cf41a3e6e6353441bc4, type: 3}
   m_Name: 
@@ -251,6 +252,19 @@ MonoBehaviour:
   jumpDuration: 150
   shoulderTrans: {fileID: 0}
   rightShoulder: {fileID: 0}
+  lookPos: {x: 0, y: 0, z: 0}
+--- !u!114 &319521069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319521061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cde6c8dbdf7609c488b85630e345cfaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   lookPos: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
@@ -423,7 +437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &381693400
 Transform:
   m_ObjectHideFlags: 0
@@ -1151,6 +1165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cde6c8dbdf7609c488b85630e345cfaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lookPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1254867588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cde6c8dbdf7609c488b85630e345cfaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lookPos: {x: 0, y: 0, z: 0}
 --- !u!4 &1274704802
 Transform:
   m_ObjectHideFlags: 0
@@ -1432,6 +1448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27cbdcd01591b6409b398e6a93d4bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTransform: {fileID: 0}
   rb: {fileID: 1380865631}
   groundCheck: {fileID: 0}
   groundLayer:
@@ -1839,7 +1856,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8aae9888643c3db49bc7b83b75734b30,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1223971753872125858, guid: 8aae9888643c3db49bc7b83b75734b30,
         type: 3}
@@ -1944,7 +1961,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 8aae9888643c3db49bc7b83b75734b30,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 8aae9888643c3db49bc7b83b75734b30,
         type: 3}
@@ -2035,6 +2052,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 319521067}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8aae9888643c3db49bc7b83b75734b30,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 319521069}
   m_SourcePrefab: {fileID: 100100000, guid: 8aae9888643c3db49bc7b83b75734b30, type: 3}
 --- !u!1 &1654156649
 GameObject:
