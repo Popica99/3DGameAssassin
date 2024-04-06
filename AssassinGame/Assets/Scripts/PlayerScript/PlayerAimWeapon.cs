@@ -5,48 +5,33 @@ using CodeMonkey.Utils;
 
 public class PlayerAimWeapon : MonoBehaviour
 {
-    [SerializeField] bool lockCursor = true;
-    private void Start()
+    public Vector3 lookPos;
+    private void FixedUpdate()
     {
-        if (lockCursor == true)
+        HandleRotation();
+        HandleAimingPos();
+    }    
+    void HandleRotation()
+    {
+        Vector3 directonToLook = lookPos - transform.position;
+        directonToLook.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(directonToLook);
+
+        //Debug.Log(lookPos.x + " " + transform.position.x);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15);
+    }
+    void HandleAimingPos()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.Log("mouse pos: " + Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            lockCursor = false;
+            Vector3 lookP = hit.point;
+            lookP.z = transform.position.z;
+            lookPos = lookP;
         }
-
-
     }
-    // Update is called once per frame
-    void Update()
-    {
-
-        //Get the Screen positions of the object
-        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-
-        //Get the Screen position of the mouse
-        Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-
-        //Get the angle between the points
-        float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
-
-        //Ta Daaa
-        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-    }
-
-    float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
-    {
-        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
-    }
-    /*private void Update()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 10; // Distance from the camera to the scene (adjust as needed)
-        Vector3 objectPos = Camera.main.WorldToScreenPoint(transform.position);
-        Vector3 direction = objectPos - transform.position;
-        mousePos.x -= objectPos.x;
-        mousePos.y -= objectPos.y;
-        float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-    }*/
 }
