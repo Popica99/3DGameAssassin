@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isMovingHorizontal = false;
 
     private Vector3 lastPos;
+    public Vector3 lookPos;
 
     private Animator runAnimation;
     bool animationStarted = false;
@@ -37,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         horizontal = Input.GetAxis("Horizontal");
-        runAnimation.SetFloat("TrStartRunFloat1", Math.Abs(Input.GetAxis("Horizontal")));
+        runAnimation.SetFloat("Movement", Input.GetAxis("Horizontal"));
         if (Input.GetKeyDown(KeyCode.Space) && isPlayerGrounded)
         {
             isPlayerGrounded = false;
@@ -58,11 +59,11 @@ public class PlayerMovement : MonoBehaviour
             //rb.velocity = new Vector2(rb.velocity.x, vertical * speed * 1.2f);
         }
         else runAnimation.speed = 1f;
-        if ((Input.mousePosition.x >= 345 && Input.GetKey(KeyCode.A)) || (Input.mousePosition.x < 345 && Input.GetKey(KeyCode.D)))
+        /*if ((Input.mousePosition.x >= 345 && Input.GetKey(KeyCode.A)) || (Input.mousePosition.x < 345 && Input.GetKey(KeyCode.D)))
         {
             runAnimation.SetBool("Backward", true);
         }
-        else runAnimation.SetBool("Backward", false);
+        else runAnimation.SetBool("Backward", false);*/
     }
 
         private void OnCollisionEnter(Collision collision)
