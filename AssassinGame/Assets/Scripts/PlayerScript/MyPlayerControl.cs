@@ -118,7 +118,7 @@ public class MyPlayerControl : MonoBehaviour
         directonToLook.y = 0;
         Quaternion targetRotation = Quaternion.LookRotation(directonToLook);
 
-        Debug.Log(lookPos.x + " " + transform.position.x);
+       // Debug.Log(lookPos.x + " " + transform.position.x);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15);
     }

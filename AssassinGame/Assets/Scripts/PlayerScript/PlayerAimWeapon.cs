@@ -24,7 +24,7 @@ public class PlayerAimWeapon : MonoBehaviour
     void HandleAimingPos()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.Log("mouse pos: " + Input.mousePosition);
+        //Debug.Log("mouse pos: " + Input.mousePosition);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
