@@ -2,14 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
+using System.Security.Cryptography;
 
 public class PlayerAimWeapon : MonoBehaviour
 {
+    public GameObject player;
     public Vector3 lookPos;
+    public Transform shoulderTrans;
+    public Transform rightShoulder;
+    GameObject rsp;
+
+    private void Start()
+    {
+        rsp = new GameObject();
+        rsp.name = transform.root.name + " Right Shoulder IK Helper";
+        rsp.transform.SetParent(player.transform);
+    }
     private void FixedUpdate()
     {
         HandleRotation();
         HandleAimingPos();
+        HandleShoulder();
     }    
     void HandleRotation()
     {
@@ -33,5 +46,15 @@ public class PlayerAimWeapon : MonoBehaviour
             lookP.z = transform.position.z;
             lookPos = lookP;
         }
+    }
+    void HandleShoulder()
+    {
+        shoulderTrans.LookAt(lookPos);
+
+        Vector3 rightShoulderPos = rightShoulder.TransformPoint(Vector3.zero);
+        rsp.transform.position = rightShoulderPos;
+        rsp.transform.parent = transform;
+
+        shoulderTrans.position = rsp.transform.position;
     }
 }
