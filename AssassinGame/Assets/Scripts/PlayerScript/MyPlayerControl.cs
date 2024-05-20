@@ -24,10 +24,10 @@ public class MyPlayerControl : MonoBehaviour
     LayerMask layerMask;
     Transform modelTrans;
 
-    public Transform shoulderTrans;
-    public Transform rightShoulder;
+    /*public Transform shoulderTrans;
+    public Transform rightShoulder;*/
     public Vector3 lookPos;
-    GameObject rsp;
+    //GameObject rsp;
 
     private void Start()
     {
@@ -36,8 +36,8 @@ public class MyPlayerControl : MonoBehaviour
 
         layerMask = ~(1 << 8);
 
-        rsp = new GameObject();
-        rsp.name = transform.root.name + " Right Shoulder IK Helper";
+        /*rsp = new GameObject();
+        rsp.name = transform.root.name + " Right Shoulder IK Helper";*/
     }
 
     private void FixedUpdate()
@@ -48,7 +48,7 @@ public class MyPlayerControl : MonoBehaviour
         HandleRotation();
         HandleAimingPos();
         //HandleAnimations();
-        HandleShoulder();
+        //HandleShoulder();
     }
 
     void InputHandler()
@@ -118,7 +118,7 @@ public class MyPlayerControl : MonoBehaviour
         directonToLook.y = 0;
         Quaternion targetRotation = Quaternion.LookRotation(directonToLook);
 
-        Debug.Log(lookPos.x + " " + transform.position.x);
+       // Debug.Log(lookPos.x + " " + transform.position.x);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15);
     }
@@ -137,7 +137,7 @@ public class MyPlayerControl : MonoBehaviour
         }
     }
 
-    void HandleShoulder()
+    /*void HandleShoulder()
     {
         shoulderTrans.LookAt(lookPos);
 
@@ -146,7 +146,7 @@ public class MyPlayerControl : MonoBehaviour
         rsp.transform.parent = transform;
 
         shoulderTrans.position = rsp.transform.position;
-    }
+    }*/
     private bool isOnGround()
     {
         bool retVal = false;

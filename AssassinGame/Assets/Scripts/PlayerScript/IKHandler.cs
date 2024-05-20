@@ -7,7 +7,7 @@ public class IKHandler : MonoBehaviour {
     Vector3 lookPos;
     Vector3 IK_lookPos;
     Vector3 targetPos;
-    PlayerControl pl;
+    PlayerAimWeapon pl;
 
     public float lerpRate = 15;
     public float updateLookPosThreshold = 2;
@@ -27,7 +27,7 @@ public class IKHandler : MonoBehaviour {
     void Start()
     {
         this.anim = GetComponent<Animator>();
-        pl = GetComponent<PlayerControl>();
+        pl = GetComponent<PlayerAimWeapon>();
     }
 
     void OnAnimatorIK()
