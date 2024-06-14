@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 
 public class PlayerAimWeapon : MonoBehaviour
 {
+    private Animator animator;
     public GameObject player;
     public Vector3 lookPos;
     public Transform shoulderTrans;
@@ -14,12 +15,23 @@ public class PlayerAimWeapon : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         rsp = new GameObject();
         rsp.name = transform.root.name + " Right Shoulder IK Helper";
         rsp.transform.SetParent(player.transform);
     }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            animator.SetBool("ChangeWeaponBool", true);
+        }
+        else animator.SetBool("ChangeWeaponBool", false);
+    }
     private void FixedUpdate()
     {
+        
         HandleRotation();
         HandleAimingPos();
         HandleShoulder();
