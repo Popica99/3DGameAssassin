@@ -34,7 +34,7 @@ public class PlayerAimWeapon : MonoBehaviour
         
         HandleRotation();
         HandleAimingPos();
-        HandleShoulder();
+        //HandleShoulder();
     }    
     void HandleRotation()
     {
